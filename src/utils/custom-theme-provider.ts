@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { useThemeStore } from "@/stores/theme-store";
 
 // Fonction pour convertir une couleur hexadécimale en HSL
 function hexToHSL(hex: string): { h: number; s: number; l: number } {
@@ -158,9 +159,11 @@ export function applyTheme(primaryColor: string): void {
 }
 
 export function loadAndApplyTheme(): void {
+    const { setPrimaryColor } = useThemeStore.getState();
     invoke("load_theme_selected")
         .then((value) => {
             const theme = value as { primary_color: string };
+            setPrimaryColor(theme.primary_color);
             applyTheme(theme.primary_color);
         })
         .catch((error) =>

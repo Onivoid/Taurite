@@ -21,6 +21,7 @@ import {
 import { Settings, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ColorPicker } from "@/components/custom/color-picker";
+import { DarkModeSelector } from "@/components/custom/darkmode-selector";
 
 export function AppSidebar() {
     return (
@@ -34,7 +35,7 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton tooltip={"Accueil"} asChild>
+                                <SidebarMenuButton tooltip={"Accueil"} className="hover:text-primary" asChild>
                                     <Link to="/">
                                         <Home />
                                         <span>Accueil</span>
@@ -49,8 +50,8 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <Dialog>
-                            <DialogTrigger className="flex items-center gap-3 rounded-lg py-2 text-muted-foreground transition-all hover:text-primary">
-                                <SidebarMenuButton tooltip={"Paramètres"}>
+                            <DialogTrigger className="flex items-center gap-3 rounded-lg py-2 text-muted-foreground transition-all" asChild>
+                                <SidebarMenuButton tooltip={"Paramètres"} className="hover:text-primary">
                                     <Settings />
                                     <span>Paramètres</span>
                                 </SidebarMenuButton>
@@ -61,12 +62,12 @@ export function AppSidebar() {
                                     <DialogDescription asChild>
                                         <div>
                                             <ul className="text-foreground flex flex-col gap-4 mt-4">
-                                                {/* <li className="flex items-center gap-5 text-foreground">
+                                                <li className="flex items-center gap-5 text-foreground">
                                                     <p className="min-w-[100px]">
                                                         DarkMode :{" "}
                                                     </p>
                                                     <DarkModeSelector />
-                                                </li> */}
+                                                </li>
                                                 <li className="flex items-center gap-5 text-foreground">
                                                     <p className="min-w-[100px]">
                                                         Color Picker :{" "}

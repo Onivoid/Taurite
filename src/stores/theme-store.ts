@@ -1,10 +1,5 @@
 import { create } from "zustand";
-
-export interface ThemeStore {
-    primaryColor: string;
-    primaryColorChoices: string[];
-    setPrimaryColor: (primaryColor: string) => void;
-}
+import { ThemeStore } from "@/types/theme-types";
 
 export const useThemeStore = create<ThemeStore>((set) => ({
     primaryColor: "#6463b6",

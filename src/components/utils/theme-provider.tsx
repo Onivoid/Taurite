@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { loadAndApplyTheme } from "@/utils/custom-theme-provider";
 
 type Theme = "dark" | "light" | "system"
 
@@ -46,7 +47,8 @@ export function ThemeProvider({
         }
 
         root.classList.add(theme)
-    }, [theme])
+        loadAndApplyTheme()
+    }, [theme, loadAndApplyTheme])
 
     const value = {
         theme,

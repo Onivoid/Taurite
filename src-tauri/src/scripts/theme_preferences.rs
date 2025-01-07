@@ -1,13 +1,15 @@
 use serde::{Serialize, Deserialize};
+use tauri::path::PathResolver;
+use tauri::Runtime;
 use std::fs;
 use std::path::PathBuf;
 use tauri::command;
-use tauri::Manager::path::app_config_dir;
+use tauri::Manager;
 
-
-fn get_theme_config_file_path() -> Result<PathBuf, String> {
-    let config_dir = app_config_dir(&tauri::Config::default())
-        .ok_or_else(|| "Impossible d'obtenir le répertoire de configuration de l'application".to_string())?;
+#[command]
+fn get_theme_config_file_path(path: &PathResolver<impl Runtime>) -> Result<PathBuf, String> {
+        let config_dir = path.app_config_dir()
+        .map_err(|_| "Impossible d'obtenir le répertoire de configuration de l'application".to_string())?;
     if !config_dir.exists() {
         fs::create_dir_all(&config_dir).map_err(|e| e.to_string())?;
     }
@@ -19,17 +21,21 @@ fn get_theme_config_file_path() -> Result<PathBuf, String> {
 pub struct ThemeSelected {
     primary_color: String,
 }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct IconSize {
+    icon_size: String,
+}
 
 #[command]
-pub fn save_theme_selected(data: ThemeSelected) -> Result<(), String> {
-    let config_path = get_theme_config_file_path().map_err(|e| e.to_string())?;
+pub fn save_theme_selected(app: tauri::AppHandle, data: ThemeSelected) -> Result<(), String> {
+        let config_path = get_theme_config_file_path(app.path()).map_err(|e| e.to_string())?;
     let json_data = serde_json::to_string(&data).map_err(|e| e.to_string())?;
     fs::write(config_path, json_data).map_err(|e| e.to_string())
 }
 
 #[command]
-pub fn load_theme_selected() -> Result<ThemeSelected, String> {
-    let config_path = get_theme_config_file_path().map_err(|e| e.to_string())?;
+pub fn load_theme_selected(app: tauri::AppHandle) -> Result<ThemeSelected, String> {
+    let config_path = get_theme_config_file_path(app.path()).map_err(|e| e.to_string())?;
     if !config_path.exists() {
         return Ok(ThemeSelected {
             primary_color: "#6463b6".to_string(),
